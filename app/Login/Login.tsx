@@ -1,10 +1,14 @@
 import Banner from "@/components/Banner";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
-import { useState } from "react";
+import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
+import React, { useState } from "react";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");	
+  const [login, setLogin] = useState({
+    email: "",
+    password: "",
+  });
+
+  console.log(login);
   return (
     <View
       style={{
@@ -20,19 +24,23 @@ export default function Login() {
           <Text>Login</Text>
           <TextInput
             style={[styles.placeholder]}
-            onChangeText={text => setEmail(text)}
-            value={email}
+            onChangeText={text => setLogin({ ...login, email: text })}
+            value={login.email}
           />
         </View>
         <View style={[styles.boxInside]}>
           <Text>Senha</Text>
           <TextInput
             style={[styles.placeholder]}
-            onChangeText={text => setPassword(text)}
-            value={password}
+            onChangeText={text => setLogin({ ...login, password: text })}
+            value={login.password}
           />
         </View>
-        <Button title="Acessar" onPress={() => alert('Login')} />
+        <View style={[styles.boxBtn]}>
+          <Pressable  onPress={() => alert('Login')}>
+            <Text style={styles.btnText}>Acessar</Text>
+          </Pressable>
+        </View>
       </View>
     </View>
   )
@@ -47,7 +55,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-evenly",
     margin: 10,
-
   },
   boxInside: {
     width: "90%",
@@ -59,6 +66,21 @@ const styles = StyleSheet.create({
     width: '100%',
     color: '#FFF',
     paddingLeft: 10,
+    marginTop: 5,
   },
+  boxBtn: {
+    display: 'flex',
+    width: '100%',
+    maxWidth: '80%',
+    alignItems: 'center',
+    backgroundColor: '#32A62E',
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 5,
+    color: '#FFF',
+  },
+  btnText: {
+    color: '#FFF',
+  }
 });
 
