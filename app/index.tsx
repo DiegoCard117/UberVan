@@ -4,8 +4,8 @@ import { Link, Stack } from "expo-router";
 
 const buttons = [
   { text: "Alunos", image: require("@/image/login/aluno.png"), color: "#F2CB05" },
-  { text: "Motorista", image: require("@/image/login/motorista.png"), color: "#32A62E"  },
-  { text: "Admin", image: require("@/image/login/config.png"), color: "#0DC4D9"  },
+  { text: "Motorista", image: require("@/image/login/motorista.png"), color: "#32A62E" },
+  { text: "Admin", image: require("@/image/login/config.png"), color: "#0DC4D9" },
 ];
 
 export default function index() {
@@ -23,7 +23,7 @@ export default function index() {
           title: "Home"
         }}
       />
-      <Banner/>
+      <Banner />
       <View style={styles.box}>
         <View>
           <Image></Image>
@@ -32,12 +32,12 @@ export default function index() {
         <Text style={styles.title}>
           Selecione o Ambiente em que Deseja Fazer o Login
         </Text>
-        {buttons.map(({image, text, color }, index) => (
+        {buttons.map(({ image, text, color }, index) => (
           <View key={index} style={styles.arrButton}>
             <Image source={image} />
             <View style={{ flex: 1, marginLeft: 10 }}>
-              <TouchableOpacity style={[styles.btn, {backgroundColor: color}]} onPress={() => console.log('press')}>
-                <Link style={{textAlign: 'center'}} href={{
+              <TouchableOpacity style={[styles.btn, { backgroundColor: color }]} onPress={() => console.log('press')}>
+                <Link style={{ textAlign: 'center' }} href={{
                   pathname: "/login/[type]",
                   params: { type: text.toLowerCase() }
                 }}>{text}</Link>
@@ -74,11 +74,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     width: "80%",
   },
-  btn : {
+  btn: {
     height: 40,
     borderRadius: 5,
     display: "flex",
     justifyContent: "center",
     width: "100%",
+    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
   }
 });

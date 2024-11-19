@@ -12,17 +12,17 @@ export default function login() {
     password: "",
   });
 
-  const { type } = useLocalSearchParams()
+  const { type } = useLocalSearchParams();
   const router = useRouter();
 
-  const route = type == "admin" ? "/auth/admin" : "/auth/aluno"
+  const route = type == "admin" ? "/auth/admin" : "/auth/aluno";
 
   const handleLogin = () => {
     router.push({
       pathname: route,
       params: { type },
-    })
-  }
+    });
+  };
 
   return (
     <View
@@ -38,12 +38,12 @@ export default function login() {
           title: "Login de " + type,
         }}
       />
-      <Banner/>
+      <Banner />
       <View style={[styles.box]}>
         <View style={[styles.boxInside]}>
           <Text style={[styles.textPlaceholder]}>Login</Text>
           <View style={[styles.boxPlaceholder]}>
-            <Image source={perfil} style={[styles.icon]}/>
+            <Image source={perfil} style={[styles.icon]} />
             <TextInput
               style={[styles.placeholder]}
               onChangeText={text => setLogin({ ...login, email: text })}
@@ -54,14 +54,13 @@ export default function login() {
         <View style={[styles.boxInside]}>
           <Text style={[styles.textPlaceholder]}>Senha</Text>
           <View style={[styles.boxPlaceholder]}>
-            <Image source={lock} style={[styles.icon]}/>
+            <Image source={lock} style={[styles.icon]} />
             <TextInput
               style={[styles.placeholder]}
               onChangeText={text => setLogin({ ...login, password: text })}
               value={login.password}
             />
           </View>
-          
         </View>
         <View style={[styles.boxBtn]}>
           <Pressable onPress={handleLogin}>
@@ -72,11 +71,11 @@ export default function login() {
         </View>
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
-  box:{
+  box: {
     width: "90%",
     height: "40%",
     padding: 10,
@@ -106,6 +105,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 5,
     color: '#FFF',
+    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
   },
   btnText: {
     color: '#FFF',
