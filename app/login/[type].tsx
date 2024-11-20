@@ -15,13 +15,17 @@ export default function login() {
   const { type } = useLocalSearchParams();
   const router = useRouter();
 
-  const route = type == "admin" ? "/auth/admin" : "/auth/aluno";
+  const route = type === "admin" ? "/auth/admin" : type === "aluno" ? "/auth/aluno" : "/auth/motorista";
 
   const handleLogin = () => {
-    router.push({
-      pathname: route,
-      params: { type },
-    });
+    if (type === 'admin' && login.email === 'admin' && login.password === 'admin') {
+      router.push({
+        pathname: route,
+        params: { type },
+      });
+    } else {
+      alert('Usuário ou senha inválidos');
+    }
   };
 
   return (

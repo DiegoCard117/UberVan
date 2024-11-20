@@ -57,7 +57,9 @@ export default function register() {
         address: data.address,
         number: data.number,
         complement: data.complement,
+        type: type
       });
+      alert('registrado com sucesso');
     } catch (error) {
       console.error(error);
     }
