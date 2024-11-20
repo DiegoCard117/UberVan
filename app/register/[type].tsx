@@ -3,6 +3,10 @@ import { FormInput } from "@/components/FormInput";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { View, Text, TextInput, StyleSheet, ScrollView, ImageSourcePropType, TouchableOpacity } from "react-native";
+import { auth, firestore } from "@/firebaseConfig";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+
+import { doc, setDoc } from "firebase/firestore";
 
 import perfil from "@/image/login/perfil.png";
 import lock from "@/image/login/lock.png";
@@ -40,6 +44,25 @@ export default function register() {
     );
   }
 
+  const registerUser = async (data: { email: string; password: string;[key: string]: string; }) => {
+    const { email, password } = data;
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      const userDocRef = doc(firestore, 'users', user.uid);
+      await setDoc(userDocRef, {
+        name: data.name,
+        phone: data.phone,
+        address: data.address,
+        number: data.number,
+        complement: data.complement,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <ScrollView
       style={{
@@ -67,18 +90,28 @@ export default function register() {
             </FormInput>
           ))}
         </View>
-        <View style={[styles.boxBtn]}>
-          <TouchableOpacity>
-            <Text style={styles.btnText}>
-              Cadastrar
-            </Text>
-          </TouchableOpacity>
-        </View>
+        {(data.password !== data.confirmPassword || data.confirmPassword == '') ?
+          <View style={[styles.boxBtn, { backgroundColor: "#A6A6A6" }]}>
+            <TouchableOpacity onPress={() => alert('Senhas não Correspondentes')}>
+              <Text style={styles.btnText}>
+                Cadastrar
+              </Text>
+            </TouchableOpacity>
+          </View>
+          :
+          <View style={[styles.boxBtn]}>
+            <TouchableOpacity onPress={() => registerUser({ ...data, email: data.email, password: data.password })}>
+              <Text style={styles.btnText}>
+                Cadastrar
+              </Text>
+            </TouchableOpacity>
+          </View>
+        }
       </View>
 
-    </ScrollView>
+    </ScrollView >
   );
-}
+};
 
 const styles = StyleSheet.create({
   box: {
@@ -109,5 +142,5 @@ const styles = StyleSheet.create({
   btnText: {
     color: '#FFF',
   },
-})
+});
 

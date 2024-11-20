@@ -1,9 +1,11 @@
 import { Link, Stack, useLocalSearchParams } from "expo-router";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
+
 export default function admin() {
   const { type } = useLocalSearchParams();
   const formattedType = type[0].toUpperCase() + type.slice(1);
+
   return (
     <View style={styles.box}>
       <Stack.Screen
