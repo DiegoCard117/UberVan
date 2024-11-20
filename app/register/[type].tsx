@@ -60,8 +60,20 @@ export default function register() {
         type: type
       });
       alert('registrado com sucesso');
+
+      setData({
+        email: '',
+        password: '',
+        name: '',
+        phone: '',
+        address: '',
+        number: '',
+        complement: '',
+        confirmPassword: ''
+      });
+
     } catch (error) {
-      console.error(error);
+      alert('Erro ao registrar usuário');
     }
   };
 
@@ -118,7 +130,8 @@ export default function register() {
 const styles = StyleSheet.create({
   box: {
     marginVertical: 10,
-    margin: 'auto'
+    margin: 'auto',
+    maxWidth: '90%',
   },
   placeholder: {
     backgroundColor: "#A6A6A6",

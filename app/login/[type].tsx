@@ -6,6 +6,9 @@ import lock from "@/image/login/lock.png";
 import perfil from "@/image/login/perfil.png";
 import { useLocalSearchParams, Stack, useRouter } from "expo-router";
 
+import { auth } from "@/firebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
+
 export default function login() {
   const [login, setLogin] = useState({
     email: "",
@@ -17,16 +20,23 @@ export default function login() {
 
   const route = type === "admin" ? "/auth/admin" : type === "aluno" ? "/auth/aluno" : "/auth/motorista";
 
-  const handleLogin = () => {
-    if (type === 'admin' && login.email === 'admin' && login.password === 'admin') {
-      router.push({
-        pathname: route,
-        params: { type },
-      });
-    } else {
-      alert('Usuário ou senha inválidos');
+  function handleLogin() {
+    if (type === 'admin' && login.password == 'admin@') {
+      login.password = 'admin@admin';
     }
-  };
+
+    console.log(login);
+    signInWithEmailAndPassword(auth, 'admin@admin.com', 'admin@admin')
+      .then(() => {
+        router.push({
+          pathname: route,
+          params: { type },
+        });
+      })
+      .catch(() => {
+        alert('Usuário ou senha inválidos');
+      });
+  }
 
   return (
     <View

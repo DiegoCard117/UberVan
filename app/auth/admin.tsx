@@ -48,7 +48,7 @@ export default function admin() {
               params: { type: "aluno" }
             }}
             style={styles.btnText}>
-            Editar Aluno
+            Editar Alunos
           </Link>
         </TouchableOpacity>
 
@@ -59,7 +59,7 @@ export default function admin() {
               params: { type: "motorista" }
             }}
             style={styles.btnText}>
-            Editar Aluno
+            Editar Motorista
           </Link>
         </TouchableOpacity>
 
