@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 18,
-    textAlign: "center",
+    textAlign: "left",
   },
   btnBox: {
     display: "flex",
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   },
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
   },
   modalView: {
@@ -173,6 +173,8 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
+    borderWidth: 3,
+    borderColor: '#E3371E',
     padding: 35,
     justifyContent: 'center',
     alignItems: 'center',
@@ -202,6 +204,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalText: {
+    fontSize: 18,
     marginBottom: 15,
     textAlign: 'center',
   },

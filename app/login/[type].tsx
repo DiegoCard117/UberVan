@@ -18,7 +18,7 @@ export default function login() {
   const { type } = useLocalSearchParams();
   const router = useRouter();
 
-  const route = type === "admin" ? "/auth/admin" : type === "aluno" ? "/auth/aluno" : "/auth/motorista";
+  const route = type === "admin" ? "/auth/admin" : type === "alunos" ? "/auth/aluno" : "/auth/motorista";
 
   function handleLogin() {
     if (type === 'admin' && login.password == 'admin@') {
@@ -30,7 +30,6 @@ export default function login() {
       .then(() => {
         router.push({
           pathname: route,
-          params: { type },
         });
       })
       .catch(() => {
