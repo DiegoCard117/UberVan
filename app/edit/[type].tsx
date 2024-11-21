@@ -1,6 +1,6 @@
 import Banner from "@/components/Banner";
 import { Stack, useLocalSearchParams } from "expo-router";
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Alert, Modal, Pressable } from "react-native";
 import { collection, DocumentData, getDocs, QueryDocumentSnapshot } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { useEffect, useState } from "react";
@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 export default function edit() {
   const { type } = useLocalSearchParams();
   const [data, setData] = useState<QueryDocumentSnapshot<DocumentData>[] | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedName, setSelectedName] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,9 +56,44 @@ export default function edit() {
                   <TouchableOpacity style={[styles.btn, { backgroundColor: '#32A62E' }]}>
                     <Text style={[styles.textBtn]}>Editar</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={[styles.btn, { backgroundColor: '#E3371E' }]}>
+                  <TouchableOpacity style={[styles.btn, { backgroundColor: '#E3371E' }]} onPress={() => {
+                    setSelectedName(doc.data().name);
+                    setModalVisible(!modalVisible);
+                  }}>
                     <Text style={[styles.textBtn]}>Excluir</Text>
                   </TouchableOpacity>
+
+                  <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                      Alert.alert('Modal has been closed.');
+                      setModalVisible(!modalVisible);
+                    }}>
+                    <View style={styles.centeredView}>
+                      <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Tem certeza que deseja excluir</Text>
+                        <Text style={styles.modalText}>{selectedName}?</Text>
+                        <View style={[styles.modalBtnBox]}>
+                          <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => {
+                              setModalVisible(!modalVisible);
+
+                            }}>
+                            <Text style={styles.textStyle}>Cancelar</Text>
+                          </Pressable>
+                          <Pressable
+                            style={[styles.button, styles.buttonDelete]}
+                            onPress={() => { }}>
+                            <Text style={styles.textStyle}>Excluir</Text>
+                          </Pressable>
+                        </View>
+                      </View>
+                    </View>
+                  </Modal>
+
                 </View>
               </View>
             );
@@ -106,6 +143,13 @@ const styles = StyleSheet.create({
     height: '100%',
     paddingVertical: 5
   },
+  modalBtnBox: {
+    display: "flex",
+    justifyContent: "space-around",
+    flexDirection: "row",
+    width: '100%',
+    paddingVertical: 5
+  },
   btn: {
     width: 50,
     height: 30,
@@ -117,5 +161,48 @@ const styles = StyleSheet.create({
   },
   textBtn: {
     color: "#fff",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    width: '90%',
+    height: '40%',
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonDelete: {
+    backgroundColor: '#E3371E',
+  },
+  buttonClose: {
+    backgroundColor: '#32A62E',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
