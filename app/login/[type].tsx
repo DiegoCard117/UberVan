@@ -30,6 +30,7 @@ export default function login() {
       .then(() => {
         router.push({
           pathname: route,
+          params: { type },
         });
       })
       .catch(() => {

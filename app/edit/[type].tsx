@@ -1,16 +1,16 @@
 import Banner from "@/components/Banner";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Link, Stack, useLocalSearchParams } from "expo-router";
 import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Alert, Modal, Pressable } from "react-native";
-import { collection, DocumentData, getDocs, QueryDocumentSnapshot } from "firebase/firestore";
+import { collection, DocumentData, getDocs, QueryDocumentSnapshot, deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { useEffect, useState } from "react";
-
 
 export default function edit() {
   const { type } = useLocalSearchParams();
   const [data, setData] = useState<QueryDocumentSnapshot<DocumentData>[] | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedName, setSelectedName] = useState('');
+  const [selectedId, setSelectedId] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +29,11 @@ export default function edit() {
   }, [type]);
 
   const typeFormatted = type[0].toUpperCase() + type.slice(1);
+
+  const deleteUserById = async (id: string) => {
+    await deleteDoc(doc(db, 'users', id));
+    setModalVisible(!modalVisible);
+  };
 
   return (
     <View
@@ -54,11 +59,17 @@ export default function edit() {
                 <Text style={[styles.name]}>{doc.data().name}</Text>
                 <View style={[styles.btnBox]}>
                   <TouchableOpacity style={[styles.btn, { backgroundColor: '#32A62E' }]}>
-                    <Text style={[styles.textBtn]}>Editar</Text>
+                    <Link href={{
+                      pathname: `/editById/[id]`,
+                      params: { id: doc.id }
+                    }}>
+                      <Text style={[styles.textBtn]}>Editar</Text>
+                    </Link>
                   </TouchableOpacity>
                   <TouchableOpacity style={[styles.btn, { backgroundColor: '#E3371E' }]} onPress={() => {
                     setSelectedName(doc.data().name);
                     setModalVisible(!modalVisible);
+                    setSelectedId(doc.id);
                   }}>
                     <Text style={[styles.textBtn]}>Excluir</Text>
                   </TouchableOpacity>
@@ -86,7 +97,7 @@ export default function edit() {
                           </Pressable>
                           <Pressable
                             style={[styles.button, styles.buttonDelete]}
-                            onPress={() => { }}>
+                            onPress={() => deleteUserById(selectedId)}>
                             <Text style={styles.textStyle}>Excluir</Text>
                           </Pressable>
                         </View>
