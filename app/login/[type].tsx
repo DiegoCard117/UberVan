@@ -24,9 +24,12 @@ export default function login() {
     if (type === 'admin' && login.password == 'admin@') {
       login.password = 'admin@admin';
     }
-
+    //testes
+    // admin: admin@admin.com admin@admin
+    // aluno: a@aluno.com 123456
+    // motorista: m@motorista.com 123456
     console.log(login);
-    signInWithEmailAndPassword(auth, 'admin@admin.com', 'admin@admin')
+    signInWithEmailAndPassword(auth, login.email, login.password)
       .then(() => {
         router.push({
           pathname: route,

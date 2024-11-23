@@ -26,7 +26,7 @@ export default function edit() {
       }
     };
     fetchData();
-  }, [type]);
+  }, [type, modalVisible]);
 
   const typeFormatted = type[0].toUpperCase() + type.slice(1);
 
@@ -56,7 +56,7 @@ export default function edit() {
           {data?.map((doc) => {
             return (
               <View key={doc.id} style={[styles.line]}>
-                <Text style={[styles.name]}>{doc.data().name}</Text>
+                <Text style={[styles.name]}>{doc.data().name.length > 15 ? doc.data().name.substring(0, 10) + '...' : doc.data().name}</Text>
                 <View style={[styles.btnBox]}>
                   <TouchableOpacity style={[styles.btn, { backgroundColor: '#32A62E' }]}>
                     <Link href={{
