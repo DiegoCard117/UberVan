@@ -2,11 +2,11 @@ import { auth } from "@/firebaseConfig";
 import { Link } from "expo-router";
 import { View, StyleSheet } from "react-native";
 
-export default function LogoutBtn() {
+export default function LogoutBtn({ text = 'Voltar' }) {
   return (
-    <View style={{ width: '25%', margin: 5, display: 'flex', alignSelf: 'flex-end' }}>
+    <View style={{ width: '25%', display: 'flex', alignSelf: 'flex-end' }}>
       <Link style={[styles.logoutBtn]} href={'/'} onPress={() => auth.signOut()}>
-        Logout
+        {text}
       </Link>
     </View>
   );

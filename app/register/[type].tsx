@@ -10,6 +10,7 @@ import { doc, setDoc } from "firebase/firestore";
 
 import perfil from "@/image/login/perfil.png";
 import lock from "@/image/login/lock.png";
+import Header from "@/components/Header";
 
 export default function register() {
 
@@ -91,11 +92,7 @@ export default function register() {
         width: "100%",
       }}
     >
-      <Stack.Screen
-        options={{
-          title: "Cadastrar " + type,
-        }}
-      />
+      <Header title={`Cadastrar ${type}s`} text="Voltar" link={"/auth/admin?type=admin"} />
       <Banner />
       <View style={[styles.box]}>
         <Text>

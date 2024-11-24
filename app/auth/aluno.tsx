@@ -1,12 +1,11 @@
 import Banner from "@/components/Banner";
-import { Stack } from "expo-router";
 import { ScrollView, Text, View, StyleSheet, TouchableOpacity, Modal, Alert } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db, firestore } from "@/firebaseConfig";
 import { RadioButton } from 'react-native-paper';
-import LogoutBtn from "@/components/LogoutBtn";
+import Header from "@/components/Header";
 
 export default function aluno() {
   const auth = getAuth();
@@ -111,13 +110,7 @@ export default function aluno() {
         paddingTop: 5
       }}
     >
-      <Stack.Screen
-        options={{
-          title: `Bem vindo ${fetchData?.name?.substring(0, 15)}`,
-          headerStyle: { backgroundColor: "#F2CB05" },
-        }}
-      />
-      <LogoutBtn />
+      <Header title={`Bem Vindo ${fetchData.name}!`} text="Voltar" />
       <Banner />
       <ScrollView style={[styles.container]}>
         <View style={[styles.box]}>

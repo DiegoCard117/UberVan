@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 
-import perfil from "@/image/login/perfil.png";
 import { db } from "@/firebaseConfig";
+import Header from "@/components/Header";
 
 export default function EditById() {
   const [type, setType] = useState("");
@@ -87,11 +87,7 @@ export default function EditById() {
 
   return (
     <ScrollView style={styles.scroll}>
-      <Stack.Screen
-        options={{
-          title: `Editar o ${type} ${fetchData?.name?.substring(0, 15)}`,
-        }}
-      />
+      <Header title={`Editar ${type} ${fetchData.name}`} text="Voltar" link={"/edit/aluno"} />
       <Banner />
       <View style={styles.box}>
         <Text style={styles.title}>Edite os campos do {type}.</Text>

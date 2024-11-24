@@ -1,11 +1,11 @@
-import { Stack, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { ScrollView, Text, View, StyleSheet } from "react-native";
 import Banner from "@/components/Banner";
-import LogoutBtn from "@/components/LogoutBtn";
 import { useEffect, useState } from "react";
-import { collection, doc, DocumentData, getDoc, getDocs, onSnapshot, QueryDocumentSnapshot } from "firebase/firestore";
+import { collection, doc, DocumentData, getDoc, onSnapshot, QueryDocumentSnapshot } from "firebase/firestore";
 import { auth, db } from "@/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
+import Header from "@/components/Header";
 
 export default function motorista() {
   const { type } = useLocalSearchParams();
@@ -22,19 +22,6 @@ export default function motorista() {
   useEffect(() => {
     const fetchData = async () => {
       if (typeof type === 'string') {
-        /**
-         * const querySnapshotUser = await getDocs(collection(db, 'users'));
-          const querySnapshotTrip = await getDocs(collection(db, 'viagens'));
-
-          const filteredDocs: QueryDocumentSnapshot<DocumentData>[] = [];
-          const filteredDocsTrip: QueryDocumentSnapshot<DocumentData>[] = [];
-          querySnapshotUser.forEach((doc) => {
-            filteredDocs.push(doc);
-          });
-          querySnapshotTrip.forEach((doc) => {
-            filteredDocsTrip.push(doc);
-          });
-         */
         const unsubscribeUser = onSnapshot(collection(db, 'users'), (snapshot) => {
           const filteredDocs: QueryDocumentSnapshot<DocumentData>[] = [];
           snapshot.forEach((doc) => {
@@ -113,13 +100,7 @@ export default function motorista() {
         paddingTop: 5
       }}
     >
-      <Stack.Screen
-        options={{
-          title: `Bem vindo ${userName.substring(0, 15)}!`,
-          headerStyle: { backgroundColor: "#F2CB05" },
-        }}
-      />
-      <LogoutBtn />
+      <Header text="Voltar" title={`Olá, ${userName}`} />
       <Banner />
       <View style={[styles.container]}>
         <View style={[styles.box]}>

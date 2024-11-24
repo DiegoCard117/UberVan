@@ -11,6 +11,7 @@ import lock from "@/image/login/lock.png";
 import perfil from "@/image/login/perfil.png";
 import eyeIcon from '@/assets/images/eyeIcon.png';
 import eyeOffIcon from '@/assets/images/eyeOffIcon.png';
+import Header from "@/components/Header";
 
 export default function login() {
   const [login, setLogin] = useState({
@@ -67,62 +68,60 @@ export default function login() {
   }
 
   return (
-    <View
-      style={{
-        width: "100%",
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Stack.Screen
-        options={{
-          title: "Login de " + type,
+    <>
+      <Header title={`Login do ${type}`} text="Voltar" />
+      <View
+        style={{
+          width: "100%",
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
         }}
-      />
-      <Banner />
-      <View style={[styles.box]}>
-        <View style={[styles.boxInside]}>
-          <Text style={[styles.textPlaceholder]}>Login</Text>
-          <View style={[styles.boxPlaceholder]}>
-            <Image source={perfil} style={[styles.icon]} />
-            <TextInput
-              style={[styles.placeholder]}
-              onChangeText={text => setLogin({ ...login, email: text })}
-              value={login.email}
-            />
-          </View>
-        </View>
-        <View style={[styles.boxInside]}>
-          <Text style={[styles.textPlaceholder]}>Senha</Text>
-          <View style={[styles.boxPlaceholder]}>
-            <Image source={lock} style={[styles.icon]} />
-            <TextInput
-              style={[styles.placeholder]}
-              onChangeText={(text) => setLogin({ ...login, password: text })}
-              value={login.password}
-              secureTextEntry={!isPasswordVisible} // Controla a visibilidade da senha
-            />
-            <TouchableOpacity
-              style={styles.toggleButton}
-              onPress={() => setPasswordVisible(!isPasswordVisible)}
-            >
-              <Image
-                source={isPasswordVisible ? eyeIcon : eyeOffIcon} // Alterna entre os ícones
-                style={styles.icon}
+      >
+        <Banner />
+        <View style={[styles.box]}>
+          <View style={[styles.boxInside]}>
+            <Text style={[styles.textPlaceholder]}>Login</Text>
+            <View style={[styles.boxPlaceholder]}>
+              <Image source={perfil} style={[styles.icon]} />
+              <TextInput
+                style={[styles.placeholder]}
+                onChangeText={text => setLogin({ ...login, email: text })}
+                value={login.email}
               />
-            </TouchableOpacity>
+            </View>
           </View>
-        </View>
-        <View style={[styles.boxBtn]}>
-          <Pressable onPress={handleLogin}>
-            <Text style={styles.btnText}>
-              Acessar
-            </Text>
-          </Pressable>
+          <View style={[styles.boxInside]}>
+            <Text style={[styles.textPlaceholder]}>Senha</Text>
+            <View style={[styles.boxPlaceholder]}>
+              <Image source={lock} style={[styles.icon]} />
+              <TextInput
+                style={[styles.placeholder]}
+                onChangeText={(text) => setLogin({ ...login, password: text })}
+                value={login.password}
+                secureTextEntry={!isPasswordVisible} // Controla a visibilidade da senha
+              />
+              <TouchableOpacity
+                style={styles.toggleButton}
+                onPress={() => setPasswordVisible(!isPasswordVisible)}
+              >
+                <Image
+                  source={isPasswordVisible ? eyeIcon : eyeOffIcon} // Alterna entre os ícones
+                  style={styles.icon}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={[styles.boxBtn]}>
+            <Pressable onPress={handleLogin}>
+              <Text style={styles.btnText}>
+                Acessar
+              </Text>
+            </Pressable>
+          </View>
         </View>
       </View>
-    </View>
+    </>
   );
 }
 

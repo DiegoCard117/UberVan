@@ -1,69 +1,65 @@
-import { Link, Stack, useLocalSearchParams } from "expo-router";
+import Header from "@/components/Header";
+import { Link } from "expo-router";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 
 export default function admin() {
-  const { type } = useLocalSearchParams();
-  const formattedType = type[0].toUpperCase() + type.slice(1);
 
   return (
-    <View style={styles.box}>
-      <Stack.Screen
-        options={{
-          title: "Area do " + formattedType,
-          headerStyle: { backgroundColor: "#F2CB05" },
-        }}
-      />
-      <View style={styles.secondBox}>
+    <>
+      <Header title="Login do Admin" text="Voltar" />
+      <View style={styles.box}>
+        <View style={styles.secondBox}>
 
-        <TouchableOpacity style={styles.btn}>
-          <Link
-            href={{
-              pathname: "/register/[type]",
-              params: { type: "aluno" }
-            }}
-            style={styles.btnText}>
-            Cadastrar Aluno
-          </Link>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.btn}>
+            <Link
+              href={{
+                pathname: "/register/[type]",
+                params: { type: "aluno" }
+              }}
+              style={styles.btnText}>
+              Cadastrar Aluno
+            </Link>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.btn, { backgroundColor: "#32A62E" }]}>
-          <Link
-            href={{
-              pathname: "/register/[type]",
-              params: { type: "motorista" }
-            }}
-            style={styles.btnText}>
-            Cadastrar Motorista
-          </Link>
-        </TouchableOpacity>
+          <TouchableOpacity style={[styles.btn, { backgroundColor: "#32A62E" }]}>
+            <Link
+              href={{
+                pathname: "/register/[type]",
+                params: { type: "motorista" }
+              }}
+              style={styles.btnText}>
+              Cadastrar Motorista
+            </Link>
+          </TouchableOpacity>
 
+        </View>
+        <View style={styles.secondBox}>
+
+          <TouchableOpacity style={styles.btn}>
+            <Link
+              href={{
+                pathname: "/edit/[type]",
+                params: { type: "aluno" }
+              }}
+              style={styles.btnText}>
+              Editar Alunos
+            </Link>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.btn, { backgroundColor: "#32A62E" }]}>
+            <Link
+              href={{
+                pathname: "/edit/[type]",
+                params: { type: "motorista" }
+              }}
+              style={styles.btnText}>
+              Editar Motorista
+            </Link>
+          </TouchableOpacity>
+
+        </View>
       </View>
-      <View style={styles.secondBox}>
-
-        <TouchableOpacity style={styles.btn}>
-          <Link
-            href={{
-              pathname: "/edit/[type]",
-              params: { type: "aluno" }
-            }}
-            style={styles.btnText}>
-            Editar Alunos
-          </Link>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={[styles.btn, { backgroundColor: "#32A62E" }]}>
-          <Link
-            href={{
-              pathname: "/edit/[type]",
-              params: { type: "motorista" }
-            }}
-            style={styles.btnText}>
-            Editar Motorista
-          </Link>
-        </TouchableOpacity>
-
-      </View>
-    </View>
+    </>
   );
 }
 
@@ -92,5 +88,7 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: 20,
     fontWeight: "bold",
+    width: '100%',
+    textAlign: 'center',
   },
 });

@@ -4,6 +4,7 @@ import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Alert, Modal, Pre
 import { collection, DocumentData, getDocs, QueryDocumentSnapshot, deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { useEffect, useState } from "react";
+import Header from "@/components/Header";
 
 export default function edit() {
   const { type } = useLocalSearchParams();
@@ -36,82 +37,80 @@ export default function edit() {
   };
 
   return (
-    <View
-      style={{
-        width: "100%",
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Stack.Screen
-        options={{
-          title: "Editar " + type + "s",
+    <>
+      <Header title={`Editar ${type}s`} text="Voltar" link="/auth/admin?type=admin" />
+      <View
+        style={{
+          width: "100%",
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
         }}
-      />
-      <Banner />
-      <View style={[styles.box]}>
-        <Text style={[styles.title]}>{typeFormatted}s Cadastrados</Text>
-        <ScrollView>
-          {data?.map((doc) => {
-            return (
-              <View key={doc.id} style={[styles.line]}>
-                <Text style={[styles.name]}>{doc.data().name.length > 15 ? doc.data().name.substring(0, 10) + '...' : doc.data().name}</Text>
-                <View style={[styles.btnBox]}>
-                  <TouchableOpacity style={[styles.btn, { backgroundColor: '#32A62E' }]}>
-                    <Link href={{
-                      pathname: `/editById/[id]`,
-                      params: { id: doc.id }
-                    }}>
-                      <Text style={[styles.textBtn]}>Editar</Text>
-                    </Link>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={[styles.btn, { backgroundColor: '#E3371E' }]} onPress={() => {
-                    setSelectedName(doc.data().name);
-                    setModalVisible(!modalVisible);
-                    setSelectedId(doc.id);
-                  }}>
-                    <Text style={[styles.textBtn]}>Excluir</Text>
-                  </TouchableOpacity>
-
-                  <Modal
-                    animationType="fade"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                      Alert.alert('Modal has been closed.');
+      >
+        <Banner />
+        <View style={[styles.box]}>
+          <Text style={[styles.title]}>{typeFormatted}s Cadastrados</Text>
+          <ScrollView>
+            {data?.map((doc) => {
+              return (
+                <View key={doc.id} style={[styles.line]}>
+                  <Text style={[styles.name]}>{doc.data().name.length > 15 ? doc.data().name.substring(0, 10) + '...' : doc.data().name}</Text>
+                  <View style={[styles.btnBox]}>
+                    <TouchableOpacity style={[styles.btn, { backgroundColor: '#32A62E' }]}>
+                      <Link href={{
+                        pathname: `/editById/[id]`,
+                        params: { id: doc.id }
+                      }}>
+                        <Text style={[styles.textBtn]}>Editar</Text>
+                      </Link>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.btn, { backgroundColor: '#E3371E' }]} onPress={() => {
+                      setSelectedName(doc.data().name);
                       setModalVisible(!modalVisible);
+                      setSelectedId(doc.id);
                     }}>
-                    <View style={styles.centeredView}>
-                      <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Tem certeza que deseja excluir</Text>
-                        <Text style={styles.modalText}>{selectedName}?</Text>
-                        <View style={[styles.modalBtnBox]}>
-                          <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => {
-                              setModalVisible(!modalVisible);
+                      <Text style={[styles.textBtn]}>Excluir</Text>
+                    </TouchableOpacity>
 
-                            }}>
-                            <Text style={styles.textStyle}>Cancelar</Text>
-                          </Pressable>
-                          <Pressable
-                            style={[styles.button, styles.buttonDelete]}
-                            onPress={() => deleteUserById(selectedId)}>
-                            <Text style={styles.textStyle}>Excluir</Text>
-                          </Pressable>
+                    <Modal
+                      animationType="fade"
+                      transparent={true}
+                      visible={modalVisible}
+                      onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                        setModalVisible(!modalVisible);
+                      }}>
+                      <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                          <Text style={styles.modalText}>Tem certeza que deseja excluir</Text>
+                          <Text style={styles.modalText}>{selectedName}?</Text>
+                          <View style={[styles.modalBtnBox]}>
+                            <Pressable
+                              style={[styles.button, styles.buttonClose]}
+                              onPress={() => {
+                                setModalVisible(!modalVisible);
+
+                              }}>
+                              <Text style={styles.textStyle}>Cancelar</Text>
+                            </Pressable>
+                            <Pressable
+                              style={[styles.button, styles.buttonDelete]}
+                              onPress={() => deleteUserById(selectedId)}>
+                              <Text style={styles.textStyle}>Excluir</Text>
+                            </Pressable>
+                          </View>
                         </View>
                       </View>
-                    </View>
-                  </Modal>
+                    </Modal>
 
+                  </View>
                 </View>
-              </View>
-            );
-          })}
-        </ScrollView>
+              );
+            })}
+          </ScrollView>
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
