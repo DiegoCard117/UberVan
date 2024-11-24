@@ -1,6 +1,5 @@
 import { Link, Stack, useLocalSearchParams } from "expo-router";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 
 export default function admin() {
   const { type } = useLocalSearchParams();

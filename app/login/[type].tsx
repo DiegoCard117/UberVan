@@ -7,7 +7,7 @@ import perfil from "@/image/login/perfil.png";
 import { useLocalSearchParams, Stack, useRouter } from "expo-router";
 
 import { auth, db } from "@/firebaseConfig";
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
 export default function login() {
