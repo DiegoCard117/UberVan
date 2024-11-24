@@ -1,13 +1,13 @@
 import Banner from "@/components/Banner";
 import { View, Text, TextInput, StyleSheet, Pressable, Image } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import lock from "@/image/login/lock.png";
 import perfil from "@/image/login/perfil.png";
 import { useLocalSearchParams, Stack, useRouter } from "expo-router";
 
 import { auth, db } from "@/firebaseConfig";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
 export default function login() {
@@ -27,7 +27,6 @@ export default function login() {
         : "/auth/motorista";
     return route;
   }
-
 
   function handleLogin() {
     if (type === 'admin' && login.password == 'admin@') {

@@ -3,7 +3,7 @@ import { Link, Stack } from "expo-router";
 import { ScrollView, Text, View, StyleSheet, TouchableOpacity, Button, Modal, Alert, Pressable } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { collection, doc, DocumentData, getDoc, getDocs, QueryDocumentSnapshot, setDoc } from "firebase/firestore";
+import { collection, doc, DocumentData, getDoc, getDocs, onSnapshot, QueryDocumentSnapshot, setDoc } from "firebase/firestore";
 import { db, firestore } from "@/firebaseConfig";
 import { RadioButton } from 'react-native-paper';
 
@@ -38,10 +38,9 @@ export default function aluno() {
 
   const todayFormatted = new Date().getDate() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getFullYear();
 
-  const ref = doc(db, 'viagens', `${todayFormatted}$-$${id}`);
-
   useEffect(() => {
     const fetchData = async () => {
+      const ref = doc(db, 'viagens', `${todayFormatted}$-$${id}`);
       const docSnap = await getDoc(ref);
       if (docSnap.exists()) {
         setFetchDataUnique(docSnap.data());
@@ -50,7 +49,7 @@ export default function aluno() {
       }
     };
     fetchData();
-  }, [modalVisible]);
+  }, [modalVisible, fetchData]);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
