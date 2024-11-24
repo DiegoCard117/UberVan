@@ -3,7 +3,7 @@ import { ScrollView, Text, View, StyleSheet } from "react-native";
 import Banner from "@/components/Banner";
 import LogoutBtn from "@/components/LogoutBtn";
 import { useEffect, useState } from "react";
-import { collection, doc, DocumentData, getDoc, getDocs, QueryDocumentSnapshot } from "firebase/firestore";
+import { collection, doc, DocumentData, getDoc, getDocs, onSnapshot, QueryDocumentSnapshot } from "firebase/firestore";
 import { auth, db } from "@/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -22,19 +22,38 @@ export default function motorista() {
   useEffect(() => {
     const fetchData = async () => {
       if (typeof type === 'string') {
-        const querySnapshotUser = await getDocs(collection(db, 'users'));
-        const querySnapshotTrip = await getDocs(collection(db, 'viagens'));
+        /**
+         * const querySnapshotUser = await getDocs(collection(db, 'users'));
+          const querySnapshotTrip = await getDocs(collection(db, 'viagens'));
 
-        const filteredDocs: QueryDocumentSnapshot<DocumentData>[] = [];
-        const filteredDocsTrip: QueryDocumentSnapshot<DocumentData>[] = [];
-        querySnapshotUser.forEach((doc) => {
-          filteredDocs.push(doc);
+          const filteredDocs: QueryDocumentSnapshot<DocumentData>[] = [];
+          const filteredDocsTrip: QueryDocumentSnapshot<DocumentData>[] = [];
+          querySnapshotUser.forEach((doc) => {
+            filteredDocs.push(doc);
+          });
+          querySnapshotTrip.forEach((doc) => {
+            filteredDocsTrip.push(doc);
+          });
+         */
+        const unsubscribeUser = onSnapshot(collection(db, 'users'), (snapshot) => {
+          const filteredDocs: QueryDocumentSnapshot<DocumentData>[] = [];
+          snapshot.forEach((doc) => {
+            filteredDocs.push(doc);
+          });
+          setFetchUsers(filteredDocs);
         });
-        querySnapshotTrip.forEach((doc) => {
-          filteredDocsTrip.push(doc);
+        const unsubscribeTrip = onSnapshot(collection(db, 'viagens'), (snapshot) => {
+          const filteredDocsTrip: QueryDocumentSnapshot<DocumentData>[] = [];
+          snapshot.forEach((doc) => {
+            filteredDocsTrip.push(doc);
+          });
+          setFetchTrip(filteredDocsTrip);
         });
-        setFetchUsers(filteredDocs);
-        setFetchTrip(filteredDocsTrip);
+
+        return () => {
+          unsubscribeUser();
+          unsubscribeTrip();
+        };
       }
     };
     fetchData();
