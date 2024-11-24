@@ -60,8 +60,6 @@ export default function editById() {
     complement: "",
   });
 
-  console.log(fetchData?.name);
-
   const fields: { name: string; key: string; image: ImageSourcePropType; }[] = [
     { name: "Nome Completo", key: "name", image: perfil },
     { name: "Telefone", key: "phone", image: perfil },

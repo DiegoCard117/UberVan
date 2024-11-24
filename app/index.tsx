@@ -3,7 +3,7 @@ import Banner from "@/components/Banner";
 import { Link, Stack } from "expo-router";
 
 const buttons = [
-  { text: "Alunos", image: require("@/image/login/aluno.png"), color: "#F2CB05" },
+  { text: "Aluno", image: require("@/image/login/aluno.png"), color: "#F2CB05" },
   { text: "Motorista", image: require("@/image/login/motorista.png"), color: "#32A62E" },
   { text: "Admin", image: require("@/image/login/config.png"), color: "#0DC4D9" },
 ];

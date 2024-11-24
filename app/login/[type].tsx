@@ -1,13 +1,14 @@
 import Banner from "@/components/Banner";
 import { View, Text, TextInput, StyleSheet, Pressable, Image } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import lock from "@/image/login/lock.png";
 import perfil from "@/image/login/perfil.png";
 import { useLocalSearchParams, Stack, useRouter } from "expo-router";
 
-import { auth } from "@/firebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "@/firebaseConfig";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function login() {
   const [login, setLogin] = useState({
@@ -18,7 +19,15 @@ export default function login() {
   const { type } = useLocalSearchParams();
   const router = useRouter();
 
-  const route = type === "admin" ? "/auth/admin" : type === "alunos" ? "/auth/aluno" : "/auth/motorista";
+  function getRoute(type: string) {
+    const route = type === "admin"
+      ? "/auth/admin"
+      : type === "aluno"
+        ? "/auth/aluno"
+        : "/auth/motorista";
+    return route;
+  }
+
 
   function handleLogin() {
     if (type === 'admin' && login.password == 'admin@') {
@@ -31,9 +40,22 @@ export default function login() {
     console.log(login);
     signInWithEmailAndPassword(auth, login.email, login.password)
       .then(() => {
-        router.push({
-          pathname: route,
-          params: { type },
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            const ref = doc(db, 'users', user.uid);
+            const docSnap = await getDoc(ref);
+            console.log(docSnap.data());
+            if (docSnap.exists()) {
+              if (docSnap.data().type == type) {
+                router.push({
+                  pathname: getRoute(Array.isArray(type) ? type[0] : type),
+                  params: { type },
+                });
+              }
+            } else {
+              alert('Tipo de usuário não autorizado');
+            }
+          }
         });
       })
       .catch(() => {
