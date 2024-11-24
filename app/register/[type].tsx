@@ -59,6 +59,14 @@ export default function register() {
         complement: data.complement,
         type: type
       });
+
+      const tripDocRef = doc(firestore, 'viagens', user.uid);
+      await setDoc(tripDocRef, {
+        name: data.name,
+        type: type,
+        value: '',
+      });
+
       alert('registrado com sucesso');
 
       setData({

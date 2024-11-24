@@ -1,11 +1,12 @@
 import Banner from "@/components/Banner";
-import { Link, Stack } from "expo-router";
-import { ScrollView, Text, View, StyleSheet, TouchableOpacity, Button, Modal, Alert, Pressable } from "react-native";
+import { Stack } from "expo-router";
+import { ScrollView, Text, View, StyleSheet, TouchableOpacity, Modal, Alert } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { collection, doc, DocumentData, getDoc, getDocs, onSnapshot, QueryDocumentSnapshot, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db, firestore } from "@/firebaseConfig";
 import { RadioButton } from 'react-native-paper';
+import LogoutBtn from "@/components/LogoutBtn";
 
 export default function aluno() {
   const auth = getAuth();
@@ -13,7 +14,6 @@ export default function aluno() {
   const [fetchData, setFetchData] = useState<UserData>({});
   const [checked, setChecked] = useState('first');
   const [id, setId] = useState('');
-  const [data, setData] = useState<QueryDocumentSnapshot<DocumentData>[] | null>(null);
   const [fetchDataUnique, setFetchDataUnique] = useState<userDataUnique>({});
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -40,12 +40,16 @@ export default function aluno() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const ref = doc(db, 'viagens', `${todayFormatted}$-$${id}`);
-      const docSnap = await getDoc(ref);
-      if (docSnap.exists()) {
-        setFetchDataUnique(docSnap.data());
-      } else {
-        console.log("No such document!");
+      try {
+        const ref = doc(db, `viagens/${id}`);
+        const docSnap = await getDoc(ref);
+        if (docSnap.exists()) {
+          setFetchDataUnique(docSnap.data());
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error(error);
       }
     };
     fetchData();
@@ -72,7 +76,6 @@ export default function aluno() {
         console.log("No user is signed in.");
       }
     });
-
   }, []);
 
   const options = [
@@ -88,8 +91,9 @@ export default function aluno() {
         name: fetchData?.name,
         type: fetchData?.type,
         value: checked,
+        date: todayFormatted,
       };
-      const userDocRef = doc(firestore, `viagens/${todayFormatted}$-$${id}`);
+      const userDocRef = doc(firestore, `viagens/${id}`);
       await setDoc(userDocRef, newRegister);
       alert('registrado com sucesso');
     } catch (error) {
@@ -109,15 +113,11 @@ export default function aluno() {
     >
       <Stack.Screen
         options={{
-          title: `Editar o ${type} ${fetchData?.name?.substring(0, 15)}`,
+          title: `Bem vindo ${fetchData?.name?.substring(0, 15)}`,
           headerStyle: { backgroundColor: "#F2CB05" },
         }}
       />
-      <View style={{ width: '25%', margin: 5, display: 'flex', alignSelf: 'flex-end' }}>
-        <Link style={[styles.logoutBtn]} href={'/'} onPress={() => auth.signOut()}>
-          Logout
-        </Link>
-      </View>
+      <LogoutBtn />
       <Banner />
       <ScrollView style={[styles.container]}>
         <View style={[styles.box]}>
@@ -201,7 +201,6 @@ export default function aluno() {
           </View>
         </View>
       </Modal>
-
     </ScrollView >
   );
 }
@@ -273,14 +272,6 @@ const styles = StyleSheet.create({
   },
   btnText: {
     color: '#FFF',
-  },
-  logoutBtn: {
-    backgroundColor: "#E3371E",
-    display: 'flex',
-    justifyContent: 'center',
-    color: '#FFF',
-    padding: 5,
-    borderRadius: 5,
   },
   centeredView: {
     flex: 1,

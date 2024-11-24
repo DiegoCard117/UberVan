@@ -33,7 +33,7 @@ export default function login() {
       login.password = 'admin@admin';
     }
     //testes
-    // admin: admin@admin.com admin@admin
+    // admin: admin@admin.com admin@ (admin@admin)
     // aluno: a@aluno.com 123456
     // motorista: m@motorista.com 123456
     console.log(login);
