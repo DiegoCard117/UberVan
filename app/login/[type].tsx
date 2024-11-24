@@ -1,20 +1,24 @@
 import Banner from "@/components/Banner";
-import { View, Text, TextInput, StyleSheet, Pressable, Image } from "react-native";
+import { View, Text, TextInput, StyleSheet, Pressable, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
-
-import lock from "@/image/login/lock.png";
-import perfil from "@/image/login/perfil.png";
 import { useLocalSearchParams, Stack, useRouter } from "expo-router";
 
 import { auth, db } from "@/firebaseConfig";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
+import lock from "@/image/login/lock.png";
+import perfil from "@/image/login/perfil.png";
+import eyeIcon from '@/assets/images/eyeIcon.png';
+import eyeOffIcon from '@/assets/images/eyeOffIcon.png';
+
 export default function login() {
   const [login, setLogin] = useState({
     email: "",
     password: "",
   });
+
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
 
   const { type } = useLocalSearchParams();
   const router = useRouter();
@@ -95,9 +99,19 @@ export default function login() {
             <Image source={lock} style={[styles.icon]} />
             <TextInput
               style={[styles.placeholder]}
-              onChangeText={text => setLogin({ ...login, password: text })}
+              onChangeText={(text) => setLogin({ ...login, password: text })}
               value={login.password}
+              secureTextEntry={!isPasswordVisible} // Controla a visibilidade da senha
             />
+            <TouchableOpacity
+              style={styles.toggleButton}
+              onPress={() => setPasswordVisible(!isPasswordVisible)}
+            >
+              <Image
+                source={isPasswordVisible ? eyeIcon : eyeOffIcon} // Alterna entre os ícones
+                style={styles.icon}
+              />
+            </TouchableOpacity>
           </View>
         </View>
         <View style={[styles.boxBtn]}>
@@ -161,6 +175,9 @@ const styles = StyleSheet.create({
   icon: {
     width: 25,
     height: 25,
-  }
+  },
+  toggleButton: {
+    padding: 5,
+  },
 });
 

@@ -3,13 +3,12 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCEWEA3BZj2xUe0vODlekw7aZ09-reVwhI",
-  authDomain: "uberapp-700cf.firebaseapp.com",
-  projectId: "uberapp-700cf",
-  storageBucket: "uberapp-700cf.firebasestorage.app",
-  messagingSenderId: "28484479616",
-  appId: "1:28484479616:web:04a5b5cfea5bf65028d465",
-  measurementId: "G-C0JMDTMF9B",
+  apiKey: "AIzaSyAernJjecugL_XiInVM7M77ex1B5tUhx7Q",
+  authDomain: "vanapp-2b8e5.firebaseapp.com",
+  projectId: "vanapp-2b8e5",
+  storageBucket: "vanapp-2b8e5.firebasestorage.app",
+  messagingSenderId: "102334885348",
+  appId: "1:102334885348:web:cd7b4a1dd7689272e4abf1",
 };
 
 const app = initializeApp(firebaseConfig);
