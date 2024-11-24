@@ -113,7 +113,7 @@ export default function login() {
             </View>
           </View>
           <View style={[styles.boxBtn]}>
-            <Pressable onPress={handleLogin}>
+            <Pressable style={{ width: '100%' }} onPress={handleLogin}>
               <Text style={styles.btnText}>
                 Acessar
               </Text>
@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     color: '#FFF',
+    textAlign: 'center',
   },
   boxPlaceholder: {
     marginTop: 5,
@@ -177,6 +178,7 @@ const styles = StyleSheet.create({
   },
   toggleButton: {
     padding: 5,
+
   },
 });
 
