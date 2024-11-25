@@ -4,7 +4,7 @@
     "slug": "vanApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./image/login/logo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {

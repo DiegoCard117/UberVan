@@ -1,5 +1,5 @@
 import Banner from "@/components/Banner";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
@@ -26,6 +26,11 @@ export default function EditById() {
     address: "",
     number: "",
     complement: "",
+  });
+
+  const [authenticationData, setAuthenticationData] = useState({
+    email: "",
+    password: "",
   });
 
   const { id } = useLocalSearchParams();
@@ -64,8 +69,7 @@ export default function EditById() {
       });
       alert("Dados atualizados com sucesso!");
     } catch (error) {
-      console.error("Error updating data: ", error);
-      alert("Erro ao atualizar os dados!");
+      console.error('Erro ao atualizar usuário:', error);
     }
   };
 
@@ -104,6 +108,24 @@ export default function EditById() {
               />
             </View>
           ))}
+
+          <View style={styles.fieldContainer}>
+            <Text>Email</Text>
+            <TextInput
+              style={styles.placeholder}
+              value={authenticationData.email}
+              onChangeText={((text) => { setAuthenticationData((prev) => ({ ...prev, email: text })); })}
+            />
+          </View>
+          <View style={styles.fieldContainer}>
+            <Text>Senha</Text>
+            <TextInput
+              style={styles.placeholder}
+              value={authenticationData.password}
+              onChangeText={((text) => { setAuthenticationData((prev) => ({ ...prev, password: text })); })}
+            />
+          </View>
+
         </View>
         <View
           style={[
