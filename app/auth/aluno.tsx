@@ -40,7 +40,7 @@ export default function aluno() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const ref = doc(db, `viagens/${id}`);
+        const ref = doc(db, `viagens/${id}`, "");
         const docSnap = await getDoc(ref);
         if (docSnap.exists()) {
           setFetchDataUnique(docSnap.data());
@@ -201,7 +201,6 @@ export default function aluno() {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    minHeight: '100%',
     display: 'flex',
     flexDirection: 'column',
     margin: 'auto',

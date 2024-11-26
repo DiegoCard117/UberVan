@@ -58,6 +58,7 @@ export default function register() {
         address: data.address,
         number: data.number,
         complement: data.complement,
+        email: email,
         type: type
       });
 

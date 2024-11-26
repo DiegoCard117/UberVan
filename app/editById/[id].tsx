@@ -29,7 +29,6 @@ export default function EditById() {
   });
 
   const [authenticationData, setAuthenticationData] = useState({
-    email: "",
     password: "",
   });
 
@@ -55,6 +54,23 @@ export default function EditById() {
     fetchDataAsync();
   }, []);
 
+  const updatePassword = async () => {
+    try {
+      fetch(`https://api-van-kuvq.vercel.app/apiFirebase/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          password: authenticationData.password,
+          idToken: id,
+        }),
+      });
+    } catch (error) {
+      console.error('Erro ao atualizar senha:', error);
+    }
+  };
+
   const updateData = async () => {
     try {
       await updateDoc(ref, {
@@ -67,6 +83,8 @@ export default function EditById() {
       await updateDoc(refTrip, {
         name: fetchData.name,
       });
+
+      updatePassword();
       alert("Dados atualizados com sucesso!");
     } catch (error) {
       console.error('Erro ao atualizar usuário:', error);
@@ -75,6 +93,7 @@ export default function EditById() {
 
   const fields = [
     { name: "Nome Completo", key: "name" },
+    { name: "E-mail", key: "email" },
     { name: "Telefone", key: "phone" },
   ];
 
@@ -102,21 +121,15 @@ export default function EditById() {
               <TextInput
                 style={styles.placeholder}
                 value={fetchData[field.key] || ""}
-                onChangeText={(text) =>
-                  setFetchData((prev) => ({ ...prev, [field.key]: text }))
-                }
+                onChangeText={(text) => {
+                  if (field.key != 'email') {
+                    setFetchData((prev) => ({ ...prev, [field.key]: text }));
+                  }
+                }}
               />
             </View>
           ))}
 
-          <View style={styles.fieldContainer}>
-            <Text>Email</Text>
-            <TextInput
-              style={styles.placeholder}
-              value={authenticationData.email}
-              onChangeText={((text) => { setAuthenticationData((prev) => ({ ...prev, email: text })); })}
-            />
-          </View>
           <View style={styles.fieldContainer}>
             <Text>Senha</Text>
             <TextInput
