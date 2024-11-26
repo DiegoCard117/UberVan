@@ -69,6 +69,7 @@ export default function login() {
       .catch(() => {
         alert('Usuário ou senha inválidos');
       });
+    setDisabled(false);
   }
 
   return (
