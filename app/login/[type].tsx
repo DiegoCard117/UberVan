@@ -1,7 +1,7 @@
 import Banner from "@/components/Banner";
 import { View, Text, TextInput, StyleSheet, Pressable, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
-import { useLocalSearchParams, Stack, useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 import { auth, db } from "@/firebaseConfig";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
@@ -20,6 +20,7 @@ export default function login() {
   });
 
   const [isPasswordVisible, setPasswordVisible] = useState(false);
+  const [isDisabled, setDisabled] = useState(false);
 
   const { type } = useLocalSearchParams();
   const router = useRouter();
@@ -34,8 +35,11 @@ export default function login() {
   }
 
   function handleLogin() {
-    if (type === 'admin' && login.password == 'admin@') {
-      login.password = 'admin@admin';
+    setDisabled(true);
+    if (type === 'admin' && login.email != "a@admin.com" && login.password != "admin@") {
+      alert('Usuário ou senha inválidos');
+      setDisabled(false);
+      return;
     }
     //testes
     // admin: admin@admin.com admin@ (admin@admin)
@@ -112,13 +116,23 @@ export default function login() {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={[styles.boxBtn]}>
-            <Pressable style={{ width: '100%' }} onPress={handleLogin}>
-              <Text style={styles.btnText}>
-                Acessar
-              </Text>
-            </Pressable>
-          </View>
+          {isDisabled ?
+            <View style={[styles.boxBtn, { backgroundColor: '#A6A6A6' }]}>
+              <Pressable style={{ width: '100%' }}>
+                <Text style={styles.btnText}>
+                  Acessar
+                </Text>
+              </Pressable>
+            </View>
+            :
+            <View style={[styles.boxBtn]}>
+              <Pressable style={{ width: '100%' }} onPress={handleLogin}>
+                <Text style={styles.btnText}>
+                  Acessar
+                </Text>
+              </Pressable>
+            </View>
+          }
         </View>
       </View>
     </>
