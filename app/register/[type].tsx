@@ -67,7 +67,6 @@ export default function register() {
         type: type
       });
 
-
       const tripDocRef = doc(firestore, 'viagens', user.uid);
       await setDoc(tripDocRef, {
         name: data.name,
@@ -148,7 +147,7 @@ export default function register() {
           Cadastrado com sucesso
         </Text>
         <TouchableOpacity style={[styles.boxBtn]} onPress={() => setModalVisible('none')}>
-          Fechar
+          <Text>Fechar</Text>
         </TouchableOpacity>
       </View>
     </>
