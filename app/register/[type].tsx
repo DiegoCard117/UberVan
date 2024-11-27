@@ -2,7 +2,7 @@ import Banner from "@/components/Banner";
 import { FormInput } from "@/components/FormInput";
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { View, Text, TextInput, StyleSheet, ScrollView, ImageSourcePropType, TouchableOpacity, Pressable } from "react-native";
+import { View, Text, TextInput, StyleSheet, ScrollView, ImageSourcePropType, TouchableOpacity } from "react-native";
 import { auth, firestore } from "@/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
@@ -12,7 +12,6 @@ import perfil from "@/image/login/perfil.png";
 import lock from "@/image/login/lock.png";
 import Header from "@/components/Header";
 import { useRouter } from "expo-router";
-import { Button, Modal } from "react-native-paper";
 
 export default function register() {
 
@@ -31,8 +30,6 @@ export default function register() {
   const [modalVisible, setModalVisible] = useState<'none' | 'flex'>('none');
 
   const router = useRouter();
-
-  console.log(data);
 
   const fields: { name: string; key: string; image: ImageSourcePropType; }[] = [
     { name: "Nome Completo", key: "name", image: perfil },
@@ -90,15 +87,11 @@ export default function register() {
         complement: '',
         confirmPassword: ''
       });
-      setTimeout(() => {
-        setLoading('none');
-      }, 2000);
+      setLoading('none');
       alert('Usuário cadastrado com sucesso');
     } catch (error) {
       console.error('Erro ao registrar usuário:', error);
-      setTimeout(() => {
-        setLoading('none');
-      }, 2000);
+      setLoading('none');
     }
   };
 
