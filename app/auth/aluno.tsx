@@ -1,5 +1,5 @@
 import Banner from "@/components/Banner";
-import { ScrollView, Text, View, StyleSheet, TouchableOpacity, Modal, Alert } from "react-native";
+import { ScrollView, Text, View, StyleSheet, TouchableOpacity, Modal, Alert, Pressable } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -110,6 +110,7 @@ export default function aluno() {
         paddingTop: 5
       }}
     >
+
       <Header title={`Bem Vindo ${fetchData.name}!`} text="Voltar" />
       <Banner />
       <ScrollView style={[styles.container]}>

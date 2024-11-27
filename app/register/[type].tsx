@@ -1,6 +1,6 @@
 import Banner from "@/components/Banner";
 import { FormInput } from "@/components/FormInput";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { View, Text, TextInput, StyleSheet, ScrollView, ImageSourcePropType, TouchableOpacity } from "react-native";
 import { auth, firestore } from "@/firebaseConfig";
@@ -11,6 +11,7 @@ import { doc, setDoc } from "firebase/firestore";
 import perfil from "@/image/login/perfil.png";
 import lock from "@/image/login/lock.png";
 import Header from "@/components/Header";
+import { useRouter } from "expo-router";
 
 export default function register() {
 
@@ -24,6 +25,8 @@ export default function register() {
     number: "",
     complement: "",
   });
+
+  const router = useRouter();
 
   console.log(data);
 
@@ -46,6 +49,7 @@ export default function register() {
   }
 
   const registerUser = async (data: { email: string; password: string;[key: string]: string; }) => {
+    router.push('/register/aluno');
     const { email, password } = data;
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -62,13 +66,13 @@ export default function register() {
         type: type
       });
 
+
       const tripDocRef = doc(firestore, 'viagens', user.uid);
       await setDoc(tripDocRef, {
         name: data.name,
         type: type,
         value: '',
       });
-
       alert('registrado com sucesso');
 
       setData({
@@ -83,8 +87,9 @@ export default function register() {
       });
 
     } catch (error) {
-      alert('Erro ao registrar usuário');
+      console.error('Erro ao registrar usuário:', error);
     }
+
   };
 
   return (
