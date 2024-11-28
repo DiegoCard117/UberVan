@@ -22,36 +22,39 @@ Para gerar builds e hospedar o aplicativo.
 
 ## UBERVAN/
 
-├── .expo/ # Configurações do Expo
-├── .vscode/ # Configurações do editor
+```plaintext
+UBERVAN/
+├── .expo/                  # Configurações do Expo
+├── .vscode/                # Configurações do editor
 ├── app/
-│ ├── auth/ # Páginas principais por tipo de usuário logado
-│ │ ├── admin.tsx # Página do administrador
-│ │ ├── aluno.tsx # Página do aluno
-│ │ ├── motorista.tsx # Página do motorista
-│ ├── edit/ # Funcionalidades de edição
-│ │ ├── [type].tsx # Lista de usuários por tipo
-│ │ ├── editById.tsx # Edição de um usuário específico
-│ ├── login/ # Páginas de login
-│ │ ├── [type].tsx # Login dinâmico para cada tipo de usuário
-│ ├── register/ # Cadastro de usuários
-│ │ ├── [type].tsx # Cadastro dinâmico de usuários
-│ │ ├── index.tsx # Página inicial do registro
+│   ├── auth/               # Páginas principais por tipo de usuário logado
+│   │   ├── admin.tsx       # Página do administrador
+│   │   ├── aluno.tsx       # Página do aluno
+│   │   ├── motorista.tsx   # Página do motorista
+│   ├── edit/               # Funcionalidades de edição
+│   │   ├── [type].tsx      # Lista de usuários por tipo
+│   │   ├── editById.tsx    # Edição de um usuário específico
+│   ├── login/              # Páginas de login
+│   │   ├── [type].tsx      # Login dinâmico para cada tipo de usuário
+│   ├── register/           # Cadastro de usuários
+│   │   ├── [type].tsx      # Cadastro dinâmico de usuários
+│   │   ├── index.tsx       # Página inicial do registro
 ├── assets/
-│ ├── fonts/ # Fontes do aplicativo
-│ ├── images/ # Imagens gerais
-├── components/ # Componentes reutilizáveis
-│ ├── Banner.tsx # Banner com logo e imagem da van
-│ ├── FormInput.tsx # Campo de texto com label
-│ ├── Header.tsx # Cabeçalho com botão de logout
-│ ├── LogoutBtn.tsx # Botão de logout
-├── typings/ # Arquivos de tipagem
-│ ├── custom.d.ts # Tipagens customizadas
-├── scripts/ # Scripts auxiliares
-├── firebaseConfig.js # Configuração do Firebase
-├── tsconfig.json # Configuração do TypeScript
-├── app.json # Configurações do projeto Expo
-└── README.md # Documentação do projeto
+│   ├── fonts/              # Fontes do aplicativo
+│   ├── images/             # Imagens gerais
+├── components/             # Componentes reutilizáveis
+│   ├── Banner.tsx          # Banner com logo e imagem da van
+│   ├── FormInput.tsx       # Campo de texto com label
+│   ├── Header.tsx          # Cabeçalho com botão de logout
+│   ├── LogoutBtn.tsx       # Botão de logout
+├── typings/                # Arquivos de tipagem
+│   ├── custom.d.ts         # Tipagens customizadas
+├── scripts/                # Scripts auxiliares
+├── firebaseConfig.js       # Configuração do Firebase
+├── tsconfig.json           # Configuração do TypeScript
+├── app.json                # Configurações do projeto Expo
+├── README.md               # Documentação do projeto
+```
 
 ## 🚀 Funcionalidades
 
