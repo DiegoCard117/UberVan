@@ -6,6 +6,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { auth, db } from "@/firebaseConfig";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import { Checkbox } from "react-native-paper";
 
 import lock from "@/image/login/lock.png";
 import perfil from "@/image/login/perfil.png";
@@ -18,6 +19,7 @@ export default function login() {
     email: "",
     password: "",
   });
+  const [isChecked, setChecked] = useState(false);
 
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [isDisabled, setDisabled] = useState(false);
@@ -34,7 +36,12 @@ export default function login() {
     return route;
   }
 
+  function keepLogged() {
+    localStorage.setItem('keepLogged', 'true');
+  }
+
   function handleLogin() {
+
     setDisabled(true);
     if (type === 'admin' && login.email != "a@admin.com" && login.password != "admin@") {
       alert('Usuário ou senha inválidos');
@@ -45,7 +52,6 @@ export default function login() {
     // admin: admin@admin.com admin@ (admin@admin)
     // aluno: a@aluno.com 123456
     // motorista: m@motorista.com 123456
-    console.log(login);
     signInWithEmailAndPassword(auth, login.email, login.password)
       .then(() => {
         onAuthStateChanged(auth, async (user) => {
@@ -59,17 +65,20 @@ export default function login() {
                   pathname: getRoute(Array.isArray(type) ? type[0] : type),
                   params: { type },
                 });
+                setDisabled(false);
+                return;
               }
             } else {
               alert('Tipo de usuário não autorizado');
+              setDisabled(false);
             }
           }
         });
       })
       .catch(() => {
         alert('Usuário ou senha inválidos');
+        setDisabled(false);
       });
-    setDisabled(false);
   }
 
   return (
@@ -117,6 +126,20 @@ export default function login() {
               </TouchableOpacity>
             </View>
           </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Checkbox
+              status={isChecked ? "checked" : "unchecked"}
+              onPress={() => {
+                setChecked(!isChecked);
+                if (!isChecked) {
+                  keepLogged();
+                } else {
+                  localStorage.removeItem('keepLogged');
+                }
+              }}
+            />
+            <Text>Manter conectado</Text>
+          </View>
           {isDisabled ?
             <View style={[styles.boxBtn, { backgroundColor: '#A6A6A6' }]}>
               <Pressable style={{ width: '100%' }}>
@@ -135,6 +158,7 @@ export default function login() {
             </View>
           }
         </View>
+
       </View>
     </>
   );

@@ -2,6 +2,11 @@ import { Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import Banner from "@/components/Banner";
 import { Link, Stack } from "expo-router";
 
+import { onAuthStateChanged } from "firebase/auth";
+import { useEffect } from "react";
+import { useRouter } from "expo-router";
+import { auth } from "@/firebaseConfig";
+
 const buttons = [
   { text: "Aluno", image: require("@/image/login/aluno.png"), color: "#F2CB05" },
   { text: "Motorista", image: require("@/image/login/motorista.png"), color: "#32A62E" },
@@ -9,6 +14,25 @@ const buttons = [
 ];
 
 export default function index() {
+  const router = useRouter();
+  const keeping = localStorage.getItem('keepLogged');
+  if (keeping) {
+    useEffect(() => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const email = user?.email;
+        const domain = email?.substring(email.indexOf('@') + 1, email.lastIndexOf('.'));
+        if (user) {
+          if (domain === "admin" || domain === "aluno" || domain === "motorista") {
+            router.push({ pathname: `/auth/${domain}` });
+          } else {
+            console.error("Invalid domain");
+          }
+        }
+      });
+      return unsubscribe;
+    }, []);
+  }
+
   return (
     <View
       style={{
@@ -36,7 +60,7 @@ export default function index() {
           <View key={index} style={styles.arrButton}>
             <Image source={image} />
             <View style={{ flex: 1, marginLeft: 10 }}>
-              <TouchableOpacity style={[styles.btn, { backgroundColor: color }]} onPress={() => console.log('press')}>
+              <TouchableOpacity style={[styles.btn, { backgroundColor: color }]}>
                 <Link style={{ textAlign: 'center' }} href={{
                   pathname: "/login/[type]",
                   params: { type: text.toLowerCase() }

@@ -1,11 +1,38 @@
+import { useEffect, useState } from 'react';
 import { auth } from "@/firebaseConfig";
 import { Link } from "expo-router";
 import { View, StyleSheet } from "react-native";
+import { useRouter } from 'expo-router';
 
 export default function LogoutBtn({ text = 'Voltar' }) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setIsAuthenticated(!!user);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('keepLogged');
+    if (isAuthenticated) {
+      auth.signOut().catch((error) => {
+        alert('Erro ao fazer logout: ' + error.message);
+      });
+    } else {
+      alert('Usuário não está autenticado');
+    }
+  };
+
   return (
     <View style={{ width: '25%', display: 'flex', alignSelf: 'flex-end' }}>
-      <Link style={[styles.logoutBtn]} href={'/'} onPress={() => auth.signOut()}>
+      <Link style={[styles.logoutBtn]} href={'../'} onPress={() => {
+        router.push('../');
+        handleLogout();
+      }}>
         {text}
       </Link>
     </View>

@@ -9,7 +9,6 @@ import Header from "@/components/Header";
 
 export default function aluno() {
   const auth = getAuth();
-  const [type, setType] = useState('');
   const [fetchData, setFetchData] = useState<UserData>({});
   const [checked, setChecked] = useState('first');
   const [id, setId] = useState('');
@@ -64,7 +63,6 @@ export default function aluno() {
         const fetchData = async () => {
           const docSnap = await getDoc(ref);
           if (docSnap.exists()) {
-            setType(docSnap.data().type);
             setFetchData(docSnap.data());
           } else {
             console.log("No such document!");
