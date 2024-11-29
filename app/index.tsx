@@ -17,30 +17,39 @@ const buttons = [
 export default function index() {
   const router = useRouter();
 
-  const keeping = async () => {
-    const keepLogged = await AsyncStorage.getItem('keepLogged');
-    return keepLogged === 'true';
-  };
-
   useEffect(() => {
     const checkKeeping = async () => {
-      if (await keeping() === true) {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-          const email = user?.email;
-          const domain = email?.substring(email.indexOf('@') + 1, email.lastIndexOf('.'));
-          if (user) {
-            if (domain === "admin" || domain === "aluno" || domain === "motorista") {
-              router.push({ pathname: `/auth/${domain}` });
+      try {
+        const keepLogged = await AsyncStorage.getItem('keepLogged');
+
+        // Verifica se o usuário escolheu manter o login
+        if (keepLogged === 'true') {
+          // Listener para mudanças na autenticação
+          const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+              const email = user.email;
+              const domain = email?.substring(email.indexOf('@') + 1, email.lastIndexOf('.'));
+
+              if (domain === 'admin' || domain === 'aluno' || domain === 'motorista') {
+                router.push({ pathname: `/auth/${domain}` });
+              } else {
+                console.error('Invalid domain');
+              }
             } else {
-              console.error("Invalid domain");
+              console.log('No user is signed in');
             }
-          }
-        });
-        return unsubscribe;
+          });
+
+          // Limpa o listener ao desmontar
+          return unsubscribe;
+        }
+      } catch (error) {
+        console.error('Error checking keepLogged:', error);
       }
     };
+
     checkKeeping();
-  }, []);
+  }, [router]);
 
   return (
     <View

@@ -8,6 +8,7 @@ import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { Checkbox } from "react-native-paper";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setPersistence, browserLocalPersistence } from "firebase/auth";
 
 import lock from "@/image/login/lock.png";
 import perfil from "@/image/login/perfil.png";
@@ -39,6 +40,7 @@ export default function login() {
 
   function keepLogged() {
     AsyncStorage.setItem('keepLogged', 'true');
+    setPersistence(auth, browserLocalPersistence);
   }
 
   function handleLogin() {
