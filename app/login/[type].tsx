@@ -1,14 +1,15 @@
 import Banner from "@/components/Banner";
 import { View, Text, TextInput, StyleSheet, Pressable, Image, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
 import { auth, db } from "@/firebaseConfig";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { Checkbox } from "react-native-paper";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setPersistence, browserLocalPersistence } from "firebase/auth";
+
+import * as FileSystem from 'expo-file-system';
 
 import lock from "@/image/login/lock.png";
 import perfil from "@/image/login/perfil.png";
@@ -22,9 +23,9 @@ export default function login() {
     password: "",
   });
   const [isChecked, setChecked] = useState(false);
-
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [isDisabled, setDisabled] = useState(false);
+  const [id, setId] = useState<string | undefined>();
 
   const { type } = useLocalSearchParams();
   const router = useRouter();
@@ -38,13 +39,44 @@ export default function login() {
     return route;
   }
 
+  const createFile = async () => {
+    try {
+      const fileUri = `${FileSystem.documentDirectory}login.txt`;
+      await FileSystem.writeAsStringAsync(fileUri,
+        `
+        ${login.email}
+        ${login.password}        
+        `
+        , { encoding: FileSystem.EncodingType.UTF8 });
+      console.log('File created!');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const checkKeeping = async () => {
+      try {
+        const keepLogged = await FileSystem.readAsStringAsync(`${FileSystem.documentDirectory}login.txt`);
+        // Verifica se o usuário escolheu manter o login
+        if (keepLogged != '') {
+          const [email, password] = keepLogged.split('\n').map((item) => item.trim());
+          handleLogin(email, password);
+        }
+      } catch (error) {
+        console.error('Error checking keepLogged:', error);
+      }
+    };
+
+    checkKeeping();
+  }, [router]);
+
   function keepLogged() {
-    AsyncStorage.setItem('keepLogged', 'true');
     setPersistence(auth, browserLocalPersistence);
+    createFile();
   }
 
-  function handleLogin() {
-
+  function handleLogin(email: string, password: string) {
     setDisabled(true);
     if (type === 'admin' && login.email != "a@admin.com" && login.password != "admin@") {
       alert('Usuário ou senha inválidos');
@@ -55,9 +87,10 @@ export default function login() {
     // admin: admin@admin.com admin@ (admin@admin)
     // aluno: a@aluno.com 123456
     // motorista: m@motorista.com 123456
-    signInWithEmailAndPassword(auth, login.email, login.password)
+    signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         onAuthStateChanged(auth, async (user) => {
+          setId(user?.uid);
           if (user) {
             const ref = doc(db, 'users', user.uid);
             const docSnap = await getDoc(ref);
@@ -137,7 +170,11 @@ export default function login() {
                 if (!isChecked) {
                   keepLogged();
                 } else {
-                  AsyncStorage.removeItem('keepLogged');
+                  try {
+                    FileSystem.deleteAsync(`${FileSystem.documentDirectory}login.txt`);
+                  } catch (error) {
+                    console.error("Erro ao excluir o arquivo:", error);
+                  }
                 }
               }}
             />
@@ -153,7 +190,7 @@ export default function login() {
             </View>
             :
             <View style={[styles.boxBtn]}>
-              <Pressable style={{ width: '100%' }} onPress={handleLogin}>
+              <Pressable style={{ width: '100%' }} onPress={() => handleLogin(login.email, login.password)}>
                 <Text style={styles.btnText}>
                   Acessar
                 </Text>

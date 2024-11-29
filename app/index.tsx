@@ -2,12 +2,6 @@ import { Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import Banner from "@/components/Banner";
 import { Link, Stack } from "expo-router";
 
-import { onAuthStateChanged } from "firebase/auth";
-import { useEffect } from "react";
-import { useRouter } from "expo-router";
-import { auth } from "@/firebaseConfig";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const buttons = [
   { text: "Aluno", image: require("@/image/login/aluno.png"), color: "#F2CB05" },
   { text: "Motorista", image: require("@/image/login/motorista.png"), color: "#32A62E" },
@@ -15,42 +9,6 @@ const buttons = [
 ];
 
 export default function index() {
-  const router = useRouter();
-
-  useEffect(() => {
-    const checkKeeping = async () => {
-      try {
-        const keepLogged = await AsyncStorage.getItem('keepLogged');
-
-        // Verifica se o usuário escolheu manter o login
-        if (keepLogged === 'true') {
-          // Listener para mudanças na autenticação
-          const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-              const email = user.email;
-              const domain = email?.substring(email.indexOf('@') + 1, email.lastIndexOf('.'));
-
-              if (domain === 'admin' || domain === 'aluno' || domain === 'motorista') {
-                router.push({ pathname: `/auth/${domain}` });
-              } else {
-                console.error('Invalid domain');
-              }
-            } else {
-              console.log('No user is signed in');
-            }
-          });
-
-          // Limpa o listener ao desmontar
-          return unsubscribe;
-        }
-      } catch (error) {
-        console.error('Error checking keepLogged:', error);
-      }
-    };
-
-    checkKeeping();
-  }, [router]);
-
   return (
     <View
       style={{
