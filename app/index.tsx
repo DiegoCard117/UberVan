@@ -6,6 +6,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
 import { useRouter } from "expo-router";
 import { auth } from "@/firebaseConfig";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const buttons = [
   { text: "Aluno", image: require("@/image/login/aluno.png"), color: "#F2CB05" },
@@ -15,23 +16,31 @@ const buttons = [
 
 export default function index() {
   const router = useRouter();
-  const keeping = localStorage.getItem('keepLogged');
-  if (keeping) {
-    useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
-        const email = user?.email;
-        const domain = email?.substring(email.indexOf('@') + 1, email.lastIndexOf('.'));
-        if (user) {
-          if (domain === "admin" || domain === "aluno" || domain === "motorista") {
-            router.push({ pathname: `/auth/${domain}` });
-          } else {
-            console.error("Invalid domain");
+
+  const keeping = async () => {
+    const keepLogged = await AsyncStorage.getItem('keepLogged');
+    return keepLogged === 'true';
+  };
+
+  useEffect(() => {
+    const checkKeeping = async () => {
+      if (await keeping() === true) {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          const email = user?.email;
+          const domain = email?.substring(email.indexOf('@') + 1, email.lastIndexOf('.'));
+          if (user) {
+            if (domain === "admin" || domain === "aluno" || domain === "motorista") {
+              router.push({ pathname: `/auth/${domain}` });
+            } else {
+              console.error("Invalid domain");
+            }
           }
-        }
-      });
-      return unsubscribe;
-    }, []);
-  }
+        });
+        return unsubscribe;
+      }
+    };
+    checkKeeping();
+  }, []);
 
   return (
     <View

@@ -4,6 +4,8 @@ import { Link } from "expo-router";
 import { View, StyleSheet } from "react-native";
 import { useRouter } from 'expo-router';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export default function LogoutBtn({ text = 'Voltar' }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -17,7 +19,7 @@ export default function LogoutBtn({ text = 'Voltar' }) {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('keepLogged');
+    AsyncStorage.removeItem('keepLogged');
     if (isAuthenticated) {
       auth.signOut().catch((error) => {
         alert('Erro ao fazer logout: ' + error.message);

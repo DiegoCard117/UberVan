@@ -7,6 +7,7 @@ import { auth, db } from "@/firebaseConfig";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { Checkbox } from "react-native-paper";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import lock from "@/image/login/lock.png";
 import perfil from "@/image/login/perfil.png";
@@ -37,7 +38,7 @@ export default function login() {
   }
 
   function keepLogged() {
-    localStorage.setItem('keepLogged', 'true');
+    AsyncStorage.setItem('keepLogged', 'true');
   }
 
   function handleLogin() {
@@ -134,7 +135,7 @@ export default function login() {
                 if (!isChecked) {
                   keepLogged();
                 } else {
-                  localStorage.removeItem('keepLogged');
+                  AsyncStorage.removeItem('keepLogged');
                 }
               }}
             />
