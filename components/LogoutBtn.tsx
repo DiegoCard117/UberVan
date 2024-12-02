@@ -32,8 +32,6 @@ export default function LogoutBtn({ text = 'Voltar' }) {
       auth.signOut().catch((error) => {
         alert('Erro ao fazer logout: ' + error.message);
       });
-    } else {
-      alert('Usuário não está autenticado');
     }
   };
 

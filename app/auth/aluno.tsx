@@ -7,8 +7,6 @@ import { db, firestore } from "@/firebaseConfig";
 import { RadioButton } from 'react-native-paper';
 import Header from "@/components/Header";
 
-import * as FileSystem from 'expo-file-system';
-
 export default function aluno() {
   const auth = getAuth();
   const [fetchData, setFetchData] = useState<UserData>({});
@@ -17,8 +15,6 @@ export default function aluno() {
   const [fetchDataUnique, setFetchDataUnique] = useState<userDataUnique>({});
 
   const [modalVisible, setModalVisible] = useState(false);
-
-  const [file, setFile] = useState('');
 
   interface UserData {
     name?: string;

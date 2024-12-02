@@ -43,12 +43,10 @@ export default function login() {
     try {
       const fileUri = `${FileSystem.documentDirectory}login.txt`;
       await FileSystem.writeAsStringAsync(fileUri,
-        `
-        ${login.email}
-        ${login.password}        
-        `
+        `${login.email} ${login.password}`
         , { encoding: FileSystem.EncodingType.UTF8 });
       console.log('File created!');
+      console.log(login.email, login.password);
     } catch (error) {
       console.error(error);
     }
@@ -60,7 +58,7 @@ export default function login() {
         const keepLogged = await FileSystem.readAsStringAsync(`${FileSystem.documentDirectory}login.txt`);
         // Verifica se o usuário escolheu manter o login
         if (keepLogged != '') {
-          const [email, password] = keepLogged.split('\n').map((item) => item.trim());
+          const [email, password] = keepLogged.split(' ');
           handleLogin(email, password);
         }
       } catch (error) {
@@ -69,7 +67,7 @@ export default function login() {
     };
 
     checkKeeping();
-  }, [router]);
+  }, []);
 
   function keepLogged() {
     setPersistence(auth, browserLocalPersistence);
@@ -77,6 +75,7 @@ export default function login() {
   }
 
   function handleLogin(email: string, password: string) {
+    console.log('email:', email, 'password:', password);
     setDisabled(true);
     if (type === 'admin' && login.email != "a@admin.com" && login.password != "admin@") {
       alert('Usuário ou senha inválidos');
@@ -94,7 +93,6 @@ export default function login() {
           if (user) {
             const ref = doc(db, 'users', user.uid);
             const docSnap = await getDoc(ref);
-            console.log(docSnap.data());
             if (docSnap.exists()) {
               if (docSnap.data().type == type) {
                 router.push({
@@ -162,24 +160,25 @@ export default function login() {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Checkbox
-              status={isChecked ? "checked" : "unchecked"}
-              onPress={() => {
-                setChecked(!isChecked);
-                if (!isChecked) {
-                  keepLogged();
-                } else {
-                  try {
-                    FileSystem.deleteAsync(`${FileSystem.documentDirectory}login.txt`);
-                  } catch (error) {
-                    console.error("Erro ao excluir o arquivo:", error);
+          {type != 'admin' &&
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Checkbox
+                status={isChecked ? "checked" : "unchecked"}
+                onPress={() => {
+                  setChecked(!isChecked);
+                  if (!isChecked) {
+                    keepLogged();
+                  } else {
+                    try {
+                      FileSystem.deleteAsync(`${FileSystem.documentDirectory}login.txt`);
+                    } catch (error) {
+                      console.error("Erro ao excluir o arquivo:", error);
+                    }
                   }
-                }
-              }}
-            />
-            <Text>Manter conectado</Text>
-          </View>
+                }}
+              />
+              <Text>Manter conectado</Text>
+            </View>}
           {isDisabled ?
             <View style={[styles.boxBtn, { backgroundColor: '#A6A6A6' }]}>
               <Pressable style={{ width: '100%' }}>

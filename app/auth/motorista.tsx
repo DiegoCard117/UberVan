@@ -57,7 +57,7 @@ export default function motorista() {
       const userWithTrip: any[] = [];
       const userWithoutTrip: any[] = [];
       fetchTrip.forEach((tripDoc) => {
-        if (user.includes(tripDoc.data().name)) {
+        if (user.includes(tripDoc.data().name) && tripDoc.data().type == 'aluno') {
           if (tripDoc.data().date == todayFormatted && tripDoc.data().value != '') {
             userWithTrip.push(tripDoc.data());
           } else {
