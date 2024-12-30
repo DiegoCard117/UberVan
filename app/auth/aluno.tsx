@@ -32,6 +32,7 @@ export default function aluno() {
     name?: string;
     type?: string;
     value?: string;
+    date?: string;
   }
 
   const todayFormatted = new Date().getDate() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getFullYear();
@@ -99,6 +100,7 @@ export default function aluno() {
   };
 
   const today = new Date().getDate() + '/' + (new Date().getMonth() + 1) + '/' + new Date().getFullYear();
+  const todayFormat = new Date().getDate() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getFullYear();
 
   return (
     <ScrollView
@@ -119,7 +121,7 @@ export default function aluno() {
           </View>
           <Text style={{ marginTop: 20 }}>Sua Escolha ate o momento:</Text>
           <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#000', borderWidth: 1, padding: 2, borderRadius: 5, marginTop: 5 }}>
-            {options.find(option => option.value === fetchDataUnique.value)?.text}
+            {fetchDataUnique?.date === todayFormat ? options.find(option => option.value === fetchDataUnique.value)?.text : 'Nenhuma escolha feita'}
           </Text>
         </View>
         <Text style={[{ fontSize: 22, textAlign: 'center' }]} >Marque a opção desejada</Text>

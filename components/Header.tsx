@@ -9,6 +9,7 @@ interface HeaderProps {
 }
 
 export default function Header({ title, text, link }: HeaderProps) {
+
   return (
     <View style={[styles.header]}>
       <Text style={[styles.text]}>{title}</Text>

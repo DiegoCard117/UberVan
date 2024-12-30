@@ -6,7 +6,7 @@ export default function admin() {
 
   return (
     <>
-      <Header title="Login do Admin" text="Voltar" />
+      <Header title="Login do Admin" text="Voltar" link="/" />
       <View style={styles.box}>
         <View style={styles.secondBox}>
 
